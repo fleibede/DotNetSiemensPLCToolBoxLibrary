@@ -151,6 +151,13 @@ namespace DotNetSiemensPLCToolBoxLibrary.DataTypes.Projectfolders.Step7V5
             public bool IsSFB;
             public int FBNumber;
             public int CheckSum;
+            public int blklan;            
+            public byte attribute;
+            public string family;
+            public string name;
+            public int locdatalen;
+
+
         }
 
         private Dictionary<string, tmpBlock> tmpBlocks; //internal cached list of blocks already read from the S7 Project
@@ -282,7 +289,13 @@ namespace DotNetSiemensPLCToolBoxLibrary.DataTypes.Projectfolders.Step7V5
                             Array.Resize<byte>(ref ssbpart, ssbpartlen);
                         if (addinfo != null && addinfo.Length > addinfolen)
                             Array.Resize<byte>(ref addinfo, addinfolen);
-			    
+
+                        myTmpBlk.locdatalen = (int)row["LOCDATALEN"];
+                        myTmpBlk.blklan = int.Parse((string)row["BLKLANG"]);
+                        myTmpBlk.attribute = (byte)((int)row["ATTRIBUTE"]);
+                        myTmpBlk.family = (string)row["BLOCKFNAME"];
+                        myTmpBlk.name = (string)row["BLOCKNAME"];                        
+
                         var tmpCheckSum = (int)row["CHECKSUM"];
                         if (myTmpBlk.CheckSum == 0 && tmpCheckSum != 0)
                         {
@@ -489,6 +502,12 @@ namespace DotNetSiemensPLCToolBoxLibrary.DataTypes.Projectfolders.Step7V5
                         }
                     }
                 }
+
+                //myTmpBlk.locdatalen = (int)row["LOCDATALEN"];
+                //myTmpBlk.blklan = (byte)row["BLKLANG"]; ;
+                //myTmpBlk.attribute = (byte)row["ATTRIBUTE"];
+                //myTmpBlk.family = (string)row["BLOCKFNAME"];
+                //myTmpBlk.name = (string)row["BLOCKNAME"];
 
                 //Begin with the Block Reading...
                 if (blkInfo.BlockType == PLCBlockType.VAT)
